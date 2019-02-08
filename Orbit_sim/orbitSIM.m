@@ -10,17 +10,17 @@ masses = 10^24.*[1988500 0.330 4.87 5.97 0.073 0.642 1898 568 86.8 102 0.0146]; 
 N = length(masses); % Number of bodies
  
  %% Position & Velocity Data
-[posSun, velSun] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Sun');
-[posMerc, velMerc] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Mercury');
-[posV, velV] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Venus');
-[posE, velE] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Earth'); 
-[posMoon, velMoon] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Moon');
-[posMars, velMars] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Mars');
-[posJ, velJ] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Jupiter');
-[posS, velS] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Saturn');
-[posU, velU] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Uranus');
-[posN, velN] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Neptune');
-[posP, velP] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Pluto');
+[posSun, velSun] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Sun','421','km');
+[posMerc, velMerc] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Mercury','421','km');
+[posV, velV] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Venus','421','km');
+[posE, velE] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Earth','421','km'); 
+[posMoon, velMoon] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Moon','421','km');
+[posMars, velMars] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Mars','421','km');
+[posJ, velJ] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Jupiter','421','km');
+[posS, velS] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Saturn','421','km');
+[posU, velU] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Uranus','421','km');
+[posN, velN] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Neptune','421','km');
+[posP, velP] = planetEphemeris(juliandate(2000,1,1),'SolarSystem','Pluto','421','km');
 
 positions = [posSun(:) posMerc(:) posV(:) posE(:) posMoon(:) posMars(:) posJ(:) ...
     posS(:) posU(:) posN(:) posP(:)] % [m]
@@ -45,6 +45,7 @@ vidObj.FrameRate = fps;
 open(vidObj);
 accel = zeros(size(velocities));
 figure('visible','on')
+hold on
 
 % Influence of the other 10 bodies on the Earth
 for tstep = 1:T
@@ -55,15 +56,14 @@ for tstep = 1:T
                 d = sqrt((positions(1,j)-positions(1,i))^2 + (positions(2,j)-positions(2,i))^2 + (positions(3,j)-positions(3,i))^2);
 %                 accel(:,j) = (accel(:,i)+(G.*masses(j).*(positions(:,j)-positions(:,i))) ./ ...
 %                        (abs(positions(:,j)-positions(:,i))).^3);
-                accel(1,i) = (accel(1,i)+(G.*masses(j).*(positions(1,i)-positions(1,j))) ./ ...
+                accel(1,i) = (accel(1,i)+(G*masses(j)*(positions(1,j)-positions(1,i))) / ...
                             (d.^3));
-                accel(2,i) = (accel(2,i)+(G*masses(j)*(positions(2,i)-positions(2,j))) / ...
+                accel(2,i) = (accel(2,i)+(G*masses(j)*(positions(2,j)-positions(2,i))) / ...
                             (d.^3));
-                accel(3,i) = (accel(3,i)+(G*masses(j)*(positions(3,i)-positions(3,j))) / ...
+                accel(3,i) = (accel(3,i)+(G*masses(j)*(positions(3,j)-positions(3,i))) / ...
                             (d.^3));
     % Try computing acceleration in X Y and Z directions separately?
-                  
-                   tmat = 0;%% Transformation matrix for position
+                 
             end
 
             %%                      
@@ -75,9 +75,11 @@ for tstep = 1:T
     end
     lastpositions = positions
     scatter3(positions(1,:),positions(2,:),positions(3,:))
-    positions(:,:) = positions + velocities
-    velocities(:,:) = velocities - (accel*spf)
-    accel
+    hold on
+    scatter3(positions(1,1),positions(2,1),positions(3,1),'*')
+    accel = accel * (1/1)
+    positions(:,:) = positions + velocities;
+    velocities(:,:) = velocities + (accel*spf);
     
         % Axis Limits
     ylim([-1E10,1E10]);
