@@ -5,8 +5,10 @@
 % velocities = [0 47.4 35.0 29.8 24.1 13.1 9.7 6.8 5.4 4.7]; % [km/s]
 
 % We will keep masses regardless...
-                   % Sun  Merc  V    E    Moon  Mars  J    S   U    N   P
-masses = 10^24.*[1988500 0.330 4.87 5.97 0.073 0.642 1898 568 86.8 102 0.0146]; % [kg]
+                  % Sun   Merc   V      E      Moon    Mars    
+masses = 10^24.*[1988550 0.33011 4.8675 5.9723 0.07346 0.64171 ...
+    1,898.19 568.34 86.813 102.413 0.01303]; % [kg]
+%   J        S      U      N       P
 N = length(masses); % Number of bodies
  
  %% Position & Velocity Data
