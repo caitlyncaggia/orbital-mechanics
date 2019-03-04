@@ -20,6 +20,7 @@ if makePlot
     accel = zeros(size(velocities));
     figure('visible','on');
     hold on;
+    C = rand(N,3);
 end
 
 %% Run Simulation
@@ -48,14 +49,14 @@ for tstep = 1:T
     % Generate Plots
     if makePlot
         % Plot new positions
-        scatter3(positions(1,:),positions(2,:),positions(3,:));
+        scatter3(positions(1,:),positions(2,:),positions(3,:), 36, C, 'filled');
         hold on;
-        scatter3(positions(1,1),positions(2,1),positions(3,1), ... Sun
-            'r','filled');
-        scatter3(positions(1,4),positions(2,4),positions(3,4), ... Earth
-            'g', 'filled');
-        scatter3(positions(1,4),positions(2,4),positions(3,4), ... Moon
-            1, [0.5 0.5 0.5], '.', 'filled');
+%         scatter3(positions(1,1),positions(2,1),positions(3,1), ... Sun
+%             'r','filled');
+%         scatter3(positions(1,4),positions(2,4),positions(3,4), ... Earth
+%             'g', 'filled');
+%         scatter3(positions(1,5),positions(2,5),positions(3,5), ... Moon
+%             1, [0.5 0.5 0.5], '.', 'filled');
         
         % Axis limits
         ylim([-25,25]);
